@@ -21,7 +21,12 @@ const todo = (previousStatus, action) => {
                 text: action.payload.text,
                 isCompleted: false
             };
+            break;
         case "TOGGLE_TODO":
+            if (newStatus.id === action.payload.id) {
+                newStatus.isCompleted = !newStatus.isCompleted; 
+            }
+            break;
         default: 
     }
 
@@ -30,14 +35,18 @@ const todo = (previousStatus, action) => {
 
 
 const todos = (previousTodos = [], action) => {
-    const nextTodos = [...previousTodos];
+    let nextTodos = [...previousTodos];
+    
     switch(action.type) {
         case "ADD_TODO":
             nextTodos.push(todo(undefined, action));
             break;
         case "TOGGLE_TODO":
+            nextTodos = nextTodos.map(t => todo(t, action));
+            break;
         default: 
     }    
+
     return nextTodos;
 };
 
